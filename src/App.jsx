@@ -14,6 +14,7 @@ const App = () => {
 const StatsTable = (props) => {
   const stats = props.stats.stats
   const key = props.stats.key
+  const margin = props.margin
 
   // const tableBody = stats.map((stat) => {
   //   key.map(k => (
@@ -30,7 +31,7 @@ const StatsTable = (props) => {
   })
   console.log(head)
   return (
-    <table className="table w-full">
+    <table className={`table w-full m-${margin}`}>
       <thead>
         <tr>
           {head}
@@ -57,7 +58,8 @@ const StatsTable = (props) => {
 }
 
 const Description = (props) => {
-  const info = props.props.info
+  const info = props.info;
+  const margin = props.margin;
   return (
     <>
       {/* <div className="mockup-phone">
@@ -70,18 +72,27 @@ const Description = (props) => {
         </div>
       </div> */}
 
-      <div className='w-1/4 m-4 bg-gray-800 rounded-lg'>
+      <div className={`w-1/4 bg-gray-800 m-${margin} rounded-lg`}>
         <div className="flex justify-center items-center">
           <img src="https://d275t8dp8rxb42.cloudfront.net/pokemon/portrait/Clefable.png" />
         </div>
-        <p className="text-4xl text-center text-gray-100">{info.name}</p>
+        <p className="sm:text-md md:text-3xl lg:text-4xl text-center text-gray-100">{info.name}</p>
+
       </div>
     </>
   )
 }
 
 const Stats = () => {
-  const statsExample = [{ level: 1, hp: 1000, atk: 100 }, { level: 2, hp: 2000, atk: 200 }];
+  const makeStatsExample = (times) => {
+    let a = []
+    for(let i = 0; i < times; i++){
+      a.push({level: 1 * i, hp: 1000 * i, atk: 100 * i})
+    }
+    return a;
+  }
+  console.log(makeStatsExample(15))
+  const statsExample = makeStatsExample(15);
   const keyExample = ["level", "hp", "atk"];
   const tableInfo = { key: keyExample, stats: statsExample }
 
@@ -94,12 +105,9 @@ const Stats = () => {
   return (
     <>
       <div className="flex m-8 bg-gray-600 rounded-lg">
-        <Description props={{ info: { name: "Clefable" } }} />
-        <div className="ml-2 w-3/4">
-          <StatsTable stats={tableInfo} />
-        </div>
+        <Description margin={4} info={{ name: "Clefable" }} />
+        <StatsTable margin={4} stats={tableInfo} />
       </div>
-
     </>
   )
 }
