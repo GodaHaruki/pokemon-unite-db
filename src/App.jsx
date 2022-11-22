@@ -25,13 +25,9 @@ const StatsTable = (props) => {
   //     </>
   //   ))
   // })
-  const head = key.map((k, i) => {
-    console.log(`<th key=${i}>${k}</th>`)
-    return <th key={i}>{k}</th>
-  })
-  console.log(head)
+  const head = key.map((k, i) => <th key={i}>{k}</th>)
   return (
-    <table className={`table w-full m-${margin}`}>
+    <table className="table table-zebra table-compact w-full m-2 sm:m-2 md:m-3 lg:m-4">
       <thead>
         <tr>
           {head}
@@ -59,7 +55,6 @@ const StatsTable = (props) => {
 
 const Description = (props) => {
   const info = props.info;
-  const margin = props.margin;
   return (
     <>
       {/* <div className="mockup-phone">
@@ -72,12 +67,21 @@ const Description = (props) => {
         </div>
       </div> */}
 
-      <div className={`w-1/4 bg-gray-800 m-${margin} rounded-lg`}>
+      <div className="w-1/4 bg-gray-800 rounded-lg m-2 sm:m-2 md:m-3 lg:m-4">
         <div className="flex justify-center items-center">
           <img src="https://d275t8dp8rxb42.cloudfront.net/pokemon/portrait/Clefable.png" />
         </div>
-        <p className="sm:text-md md:text-3xl lg:text-4xl text-center text-gray-100">{info.name}</p>
+        <p className="mt-1 sm:text-md md:text-3xl lg:text-4xl text-center text-gray-100">{info.name}</p>
 
+        <div className="flex m-2">
+
+          {
+            info.type.map(t => <div className={`rounded-full border border-${info.color} text-xl text-primary`}>
+              <div className="px-2 py-1">Support</div>
+            </div>)
+          }
+
+        </div>
       </div>
     </>
   )
@@ -86,8 +90,8 @@ const Description = (props) => {
 const Stats = () => {
   const makeStatsExample = (times) => {
     let a = []
-    for(let i = 0; i < times; i++){
-      a.push({level: 1 * i, hp: 1000 * i, atk: 100 * i})
+    for (let i = 0; i < times; i++) {
+      a.push({ level: 1 * i, hp: 1000 * i, atk: 100 * i })
     }
     return a;
   }
@@ -104,9 +108,9 @@ const Stats = () => {
   // }, [stats])
   return (
     <>
-      <div className="flex m-8 bg-gray-600 rounded-lg">
-        <Description margin={4} info={{ name: "Clefable" }} />
-        <StatsTable margin={4} stats={tableInfo} />
+      <div className="flex m-2 sm:m-3 md:m-5 lg:m-8 bg-gray-600 rounded-lg">
+        <Description info={{ name: "Clefable", type: [{color:"primary", }] }} />
+        <StatsTable stats={tableInfo} />
       </div>
     </>
   )
