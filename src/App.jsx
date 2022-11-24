@@ -11,11 +11,30 @@ const App = () => {
 }
 
 const StatsTable = (props) => {
-  const stats = props.stats.stats
-  const key = props.stats.key
+  const stats = props.stats.current.stats
+  const key = props.stats.current.key
   const margin = props.margin
   const open = props.openModal
   const addIndex = props.addIndex
+
+  const add = (head, expr) => {
+    setHead([...head, head]);
+    props.status.current.key.push("head");
+    props.status.current.status.map(a => a.push())
+    setTable(stats.map((stat) => {
+      return (
+        <tr>
+          {
+            key.map(k => (
+              <td>
+                {stat[k]}
+              </td>
+            ))
+          }
+        </tr>
+      )
+    }))
+  }
 
   const [head, setHead] = useState(key.map((k, i) =>
     <th key={i}>
@@ -30,7 +49,22 @@ const StatsTable = (props) => {
         <div className='flex justify-center items-center'>+</div>
       </button>
     </th>
-  ))
+  ));
+
+  const [table, setTable] = useState(stats.map((stat) => {
+    return (
+      <tr>
+        {
+          key.map(k => (
+            <td>
+              {stat[k]}
+            </td>
+          ))
+        }
+      </tr>
+    )
+  }))
+
   return (
     <table className="table table-zebra table-compact w-full m-2 sm:m-2 md:m-3 lg:m-4">
       <thead>
@@ -39,19 +73,7 @@ const StatsTable = (props) => {
         </tr>
       </thead>
       <tbody>
-        {
-          stats.map((stat) => {
-            return (
-              <tr>
-                {key.map(k => (
-                  <td>
-                    {stat[k]}
-                  </td>
-                ))}
-              </tr>
-            )
-          })
-        }
+        {table}
       </tbody>
 
     </table>
@@ -108,7 +130,7 @@ const Stats = () => {
   console.log(makeStatsExample(15))
   const statsExample = makeStatsExample(15);
   const keyExample = ["level", "hp", "atk"];
-  const tableInfo = { key: keyExample, stats: statsExample }
+  const tableInfo = useRef({ key: keyExample, stats: statsExample })
 
   const [Modal, open, close, isOpen] = useModal('root', {
     preventScroll: true,
