@@ -25,7 +25,21 @@ const StatsTable = (props) => {
   //     </>
   //   ))
   // })
-  const head = key.map((k, i) => <th key={i}>{k}</th>)
+  const Add = () => (
+    <>
+    </>
+  )
+  const [head, setHead] = useState(key.map((k, i) =>
+    <th key={i}>
+      {k}
+      <button
+        className='bg-green-600 ml-2 rounded-full w-5'
+        onClick={() => console.log(i)}
+      >
+        <div className='flex justify-center items-center'>+</div>
+      </button>
+    </th>
+  ))
   return (
     <table className="table table-zebra table-compact w-full m-2 sm:m-2 md:m-3 lg:m-4">
       <thead>
@@ -55,6 +69,7 @@ const StatsTable = (props) => {
 
 const Description = (props) => {
   const info = props.info;
+  console.log(info.type.map(t => t.color))
   return (
     <>
       {/* <div className="mockup-phone">
@@ -73,12 +88,15 @@ const Description = (props) => {
         </div>
         <p className="mt-1 sm:text-md md:text-3xl lg:text-4xl text-center text-gray-100">{info.name}</p>
 
-        <div className="flex m-2">
+        <div className="flex justify-center items-center m-2">
 
           {
-            info.type.map(t => <div className={`rounded-full border border-${info.color} text-xl text-primary`}>
-              <div className="px-2 py-1">Support</div>
-            </div>)
+            info.type.map(t =>
+              <div className='px-1'>
+                <div className={`rounded-full border border-${t.color} text-sm text-primary`}>
+                  <div className="px-2 py-1">{t.type}</div>
+                </div>
+              </div>)
           }
 
         </div>
@@ -109,7 +127,7 @@ const Stats = () => {
   return (
     <>
       <div className="flex m-2 sm:m-3 md:m-5 lg:m-8 bg-gray-600 rounded-lg">
-        <Description info={{ name: "Clefable", type: [{color:"primary", }] }} />
+        <Description info={{ name: "Clefable", type: [{ color: "primary", type: "Support" }, { color: "primary", type: "Sp.Atk" }] }} />
         <StatsTable stats={tableInfo} />
       </div>
     </>
