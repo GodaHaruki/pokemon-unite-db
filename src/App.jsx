@@ -1,8 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useModal } from 'react-hooks-use-modal';
 
 const App = () => {
-
-
   return (
     <>
       {/* <StatsTable key={keyExample} stats={statsExample} /> */}
@@ -15,26 +14,18 @@ const StatsTable = (props) => {
   const stats = props.stats.stats
   const key = props.stats.key
   const margin = props.margin
+  const open = props.openModal
+  const addIndex = props.addIndex
 
-  // const tableBody = stats.map((stat) => {
-  //   key.map(k => (
-  //     <>
-  //       <td>
-  //         {stats[k]}
-  //       </td>
-  //     </>
-  //   ))
-  // })
-  const Add = () => (
-    <>
-    </>
-  )
   const [head, setHead] = useState(key.map((k, i) =>
     <th key={i}>
       {k}
       <button
         className='bg-green-600 ml-2 rounded-full w-5'
-        onClick={() => console.log(i)}
+        onClick={() => {
+          addIndex.current = i
+          open()
+        }}
       >
         <div className='flex justify-center items-center'>+</div>
       </button>
@@ -106,6 +97,7 @@ const Description = (props) => {
 }
 
 const Stats = () => {
+  const addIndex = useRef(0)
   const makeStatsExample = (times) => {
     let a = []
     for (let i = 0; i < times; i++) {
@@ -118,17 +110,37 @@ const Stats = () => {
   const keyExample = ["level", "hp", "atk"];
   const tableInfo = { key: keyExample, stats: statsExample }
 
-  // const stats = useRef([{ level: 1, hp: 1000, atk: 80 }, { level: 2, hp: 2000, atk: 160 }]);
-  // const [statsTable, setStatsTable] = useState([])
+  const [Modal, open, close, isOpen] = useModal('root', {
+    preventScroll: true,
+    focusTrapOptions: {
+      clickOutsideDeactivates: false,
+    },
+  });
 
-  // useEffect(() => {
-
-  // }, [stats])
   return (
     <>
+      <div>
+        <Modal>
+          <div className='bg-white w-200 rounded-lg text-black'>
+            <div className='px-5 py-5'>
+              <div className='flex justify-end items-end'>
+                <button className='w-4 text-gray-500 text-xl rounded-full' onClick={close}>×</button>
+              </div>
+              <p className='text-sm'>Head Name</p>
+              <input type="text" placeholder="Type here" className="p-1.5 rounded-md border border-black w-full max-w-xs" />
+
+              <br />
+
+              <p className='text-sm'>Value Expression</p>
+              <input type="text" placeholder="${level} * 10 + ${Atk} * 0.75 + 750" className="p-1.5 rounded-md border border-black w-full max-w-xs" />
+            </div>
+          </div>
+        </Modal>
+      </div>
+
       <div className="flex m-2 sm:m-3 md:m-5 lg:m-8 bg-gray-600 rounded-lg">
         <Description info={{ name: "Clefable", type: [{ color: "primary", type: "Support" }, { color: "primary", type: "Sp.Atk" }] }} />
-        <StatsTable stats={tableInfo} />
+        <StatsTable addIndex={addIndex} openModal={open} stats={tableInfo} />
       </div>
     </>
   )
